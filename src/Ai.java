@@ -51,7 +51,7 @@ public class Ai {
 		//client = new NexosisClient();//API_KEY, "https://ml.nexosis.com/v1/");
 	}
 
-	public void addUsage(String device) {
+	public void addUsage(String device, String value) {
 
 		Map<String, String> row = new LinkedHashMap<String, String>();
 		Date d = new Date();
@@ -117,7 +117,7 @@ public class Ai {
 	            HttpPut request = new HttpPut(uri);
 	            request.setHeader("Content-Type", "application/json");
 	            request.setHeader("api-key", API_KEY);
-
+	            
 
 	            // Request body
 	            StringEntity reqEntity = new StringEntity("{body}");

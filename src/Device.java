@@ -18,7 +18,7 @@ public class Device {
 	}
 	
 	public String sendGet() {
-		Ai.getInstance().addUsage(id);
+		Ai.getInstance().addUsage(id, "CHANGE");
 		try {
 			//return RestManager.sendGet(url + id);
 			return "TODO un comment ^";

@@ -1,3 +1,7 @@
+import java.awt.LinearGradientPaint;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,7 +42,13 @@ public class TwillioManager {
 	}
 
 	public String runAccounts() {
-		return RestManager.sendGet(baseUrl + ".json");
+		try {
+			return RestManager.sendGet(baseUrl + ".json");
+		} catch (KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "Error";
 	}
 	
 	//do stuff till, use latch.await() right be4 u need the stuff in data[] to wait on it (handles in threadedresponse rn)
@@ -56,11 +66,11 @@ public class TwillioManager {
 				while(true) {
 					try {
 						//System.out.println("Running Thrread loop " + name);
-						List<String> msgs = getMessagesAsArray(false, false);
+						List<String> msgs = getMessagesAsArray(true, true);
 						
 						//System.out.println("Found " + msgs.size() + " parts");
-						for(String s:msgs) {
-							
+						for(int i = 0; i < msgs.size(); i++) {
+							String s = msgs.get(i);
 							if(counter >= data.length) {
 								latch.countDown();
 								return;
@@ -92,7 +102,7 @@ public class TwillioManager {
 		try {
 			// return RestManager.sendPost(baseUrl + ACCOUNT_SID + "/Messages.json",
 			// queries, params);
-			return RestManager.sendGet(baseUrl + ACCOUNT_SID + "/Messages.json");
+			return RestManager.sendGet(baseUrl + ACCOUNT_SID + "/Messages.json?PageSize=9999");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -116,21 +126,39 @@ public class TwillioManager {
 
 	public List<String> getMessagesAsArray(boolean latest, boolean update) {
 		JSONObject obj = getMessagesAsJSON();
+		//System.out.println(obj.toString());
 		JSONArray messages = (JSONArray) obj.get("messages");
 		java.util.Iterator<JSONObject> it = messages.iterator();
 		List<String> responces = new ArrayList<String>();
 
 		while (it.hasNext()) {
-			responces.add(it.next().get("body").toString().split("Sent from your Twilio trial account - ")[1]);
+			JSONObject line = it.next();
+			//System.out.println(line.get("body").toString());
+			//System.out.println(Arrays.toString(it.next().get("body").toString().split("Sent from your Twilio trial account - ")));
+			try {
+			responces.add(line.get("body").toString().split("Sent from your Twilio trial account - ")[1]);
+			} catch (java.lang.ArrayIndexOutOfBoundsException e) {
+				continue;
+			}
+		}
+		int count = (responces.size());
+		System.out.println("Responcse size: " + count);
+		//System.out.println(responces.get(0));
+		if (latest) {
+			responces = copy(responces.subList(0, responces.size() - currentCount));
 		}
 		if (update) {
-			currentCount = responces.size();
+			currentCount = count;
 		}
-		if (latest) {
-			responces = responces.subList(currentCount, responces.size());
-		}
-
 		System.out.println("Current size: " + currentCount);
 		return responces;
+	}
+	
+	public <T> List copy(List<T> og) { 
+		List<T> list = new ArrayList<T>(og.size());
+		for(T t : og) {
+			list.add(t);
+		}
+		return list;
 	}
 }

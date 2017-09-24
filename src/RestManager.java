@@ -6,8 +6,15 @@ import java.net.Authenticator;
 import java.net.HttpURLConnection;
 import java.net.PasswordAuthentication;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.ssl.SSLContextBuilder;
 
 public class RestManager {
 
@@ -19,16 +26,24 @@ public class RestManager {
 		});
 	}
 	
-	public static String sendGet(String url) {
+	public static String sendGet(String url) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 
 		// String url = "http://www.google.com/search?q=mkyong";
 
 		// optional default is GET
 		try {
 			URL obj = new URL(url);
-			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+			HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 			con.setRequestMethod("GET");
+//		    SSLContextBuilder sslcb = new SSLContextBuilder();
+//		    sslcb.loadTrustMaterial(KeyStore.getInstance(KeyStore.getDefaultType()), new TrustSelfSignedStrategy());
+//		    con.setSSLSocketFactory(sslcb.create().build().getSocketFactory());
+			
 
+
+			// set up a TrustManager that trusts everything
+			
+		    
 			// add request header
 			// con.setRequestProperty("User-Agent", USER_AGENT);
 			int responseCode;
