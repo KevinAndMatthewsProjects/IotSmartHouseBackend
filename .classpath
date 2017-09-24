@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/gson-2.8.2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/json-simple-1.1.jar" sourcepath="C:/Users/kevin_2/AppData/Local/Temp/.org.sf.feeling.decompiler1506238109395/source/json-simple-1.1-sources.jar"/>
+	<classpathentry kind="lib" path="lib/nexosisclient-java-1.2.1.jar" sourcepath="C:/Users/kevin_2/AppData/Local/Temp/.org.sf.feeling.decompiler1506238109395/source/nexosisclient-java-1.2.1-sources.jar"/>
+	<classpathentry kind="lib" path="lib/servlet.jar"/>
+	<classpathentry kind="lib" path="lib/twilio-java-sdk-7.0.0-rc-10-jar-with-dependencies.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
